@@ -53,13 +53,18 @@ body {
     display: flex;
     justify-content: center;
     align-items: center;
-    background-color: aqua;
-    max-width: 400px;
+    background-color: rgb(52, 54, 54);
+    width: 350px;
+	height: 350px;
     margin: 0;
+	position: relative;
 }
 
 .cuadrado {
-    background-color: #4d4d48;
-    height: 16px;
-    width: 16px;
+	display: flex;
+	width: 16px;
+	height: 16px;
+	background-color: aqua;
+	position: absolute;
+
 }

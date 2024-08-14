@@ -50,21 +50,22 @@ body {
 }
 
 .container {
-    display: flex;
-    justify-content: center;
+	display: flex;
     align-items: center;
-    background-color: rgb(52, 54, 54);
-    width: 350px;
-	height: 350px;
-    margin: 0;
-	position: relative;
+    justify-content: center;
+    flex-wrap: wrap;
+    max-width: 400px;
 }
 
 .cuadrado {
-	display: flex;
-	width: 16px;
-	height: 16px;
-	background-color: aqua;
-	position: absolute;
+	background-color: #4a4949;
+    box-shadow: 0 0 2px #000;
+    height: 16px;
+    width: 16px;
+    margin: 2px;
+    transition: 2s ease;
+}
 
+.cuadrado:hover {
+	transition-duration: 0s;
 }

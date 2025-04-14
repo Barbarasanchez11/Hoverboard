@@ -1,3 +1,6 @@
+/* Importar fuente Poppins */
+@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;700&display=swap');
+
 /* Reset CSS */
 html, body, div, span, applet, object, iframe,
 h1, h2, h3, h4, h5, h6, p, blockquote, pre,
@@ -44,64 +47,103 @@ table {
 
 /* Estilos generales */
 body {
-    background-color: #111;
+    background-color: #F6EDED; /* Fondo claro */
     display: flex;
     align-items: center;
     justify-content: center;
     min-height: 100vh;
     margin: 0;
-    font-family: Arial, sans-serif;
+    font-family: 'Poppins', sans-serif;
     overflow-y: auto;
 }
 
 .container {
+    position: relative;
     display: flex;
     flex-direction: column;
     align-items: center;
     justify-content: center;
     width: 90%;
     max-width: 600px;
-    padding: 2%;
-    background-color: #4a4949;
-    border-radius: 10px;
-    box-shadow: 0 0 10px #000;
-    margin: 2% auto;
+    padding: 2rem;
+    background-color: #FFFFFF; /* Fondo blanco */
+    border-radius: 20px;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+    margin: 2rem auto;
+    overflow: hidden;
+}
+
+/* Formas decorativas */
+.container::before,
+.container::after {
+    content: '';
+    position: absolute;
+    background-color: #F3CFC6; /* Blush */
+    z-index: -1;
+}
+
+.container::before {
+    width: 150px;
+    height: 150px;
+    border-radius: 50%;
+    top: -50px;
+    left: -50px;
+    opacity: 0.7;
+}
+
+.container::after {
+    width: 200px;
+    height: 200px;
+    border-radius: 50%;
+    bottom: -80px;
+    right: -80px;
+    background-color: blueviolet;
+    opacity: 0.7;
 }
 
 h1 {
-    color: #fff;
-    font-size: clamp(1.5rem, 5vw, 2rem);
-    margin-bottom: 1rem;
+    color: #2F41DD; /* Electric Blue */
+    font-size: clamp(1.8rem, 5vw, 2.5rem);
+    font-weight: 700;
+    margin-bottom: 1.5rem;
     text-align: center;
 }
 
 button {
-    padding: 0.5rem 1rem;
+    padding: 0.7rem 1.5rem;
     font-size: clamp(0.9rem, 3vw, 1rem);
-    background-color: #df22ac;
-    color: #fff;
+    background-color: #FF600E; /* Tangerine */
+    color: #FFFFFF;
     border: none;
-    border-radius: 5px;
+    border-radius: 15px;
     cursor: pointer;
-    transition: background-color 0.2s;
-    margin: 0.2rem;
+    transition: transform 0.2s, background-color 0.3s;
+    margin: 0.3rem;
+    font-weight: 500;
 }
 
 button:hover {
-    background-color: #b11a8a;
+    transform: scale(1.05);
+    background-color: #E0550C; /* Tangerine más oscuro */
 }
 
 p {
-    color: #fff;
+    color: #CC415E; /* Magenta */
     font-size: clamp(0.9rem, 3vw, 1.1rem);
     margin: 0.5rem 0;
     text-align: center;
+    font-weight: 400;
 }
 
 /* Menú */
 #menu button {
     width: 80%;
     max-width: 300px;
+    background-color: #66D7D1; /* Aqua */
+}
+
+#menu button:hover {
+    background-color: #55BFB9; /* Aqua más oscuro */
 }
 
 /* Juego 1: Combinación de Colores */
@@ -116,8 +158,8 @@ p {
 .color-box {
     width: clamp(100px, 40vw, 150px);
     height: clamp(100px, 40vw, 150px);
-    border: 2px solid #000;
-    border-radius: 5px;
+    border: 3px solid #D8BFFF; /* Royal */
+    border-radius: 15px;
     transition: background-color 0.3s;
 }
 
@@ -131,7 +173,7 @@ p {
 }
 
 label {
-    color: #fff;
+    color: #2F41DD; /* Electric Blue */
     font-size: clamp(0.9rem, 3vw, 1rem);
     display: flex;
     align-items: center;
@@ -141,12 +183,13 @@ label {
 input[type="range"] {
     width: 100%;
     max-width: 200px;
+    accent-color: #FF600E; /* Tangerine */
 }
 
 span {
     width: 40px;
     text-align: center;
-    color: #fff;
+    color: #CC415E; /* Magenta */
     font-size: clamp(0.9rem, 3vw, 1rem);
 }
 
@@ -162,8 +205,8 @@ span {
 .color-option {
     width: clamp(80px, 20vw, 100px);
     height: clamp(80px, 20vw, 100px);
-    border: 2px solid #000;
-    border-radius: 5px;
+    border: 3px solid #F2B805; /* Gold */
+    border-radius: 50%; /* Circular */
     cursor: pointer;
     transition: transform 0.2s;
 }
@@ -175,14 +218,15 @@ span {
 #targetColorDisplay {
     width: clamp(120px, 50vw, 200px);
     height: clamp(120px, 50vw, 200px);
-    border: 2px solid #000;
-    border-radius: 5px;
+    border: 3px solid #F2B805; /* Gold */
+    border-radius: 50%; /* Circular */
     margin-bottom: 1rem;
 }
 
 #timer {
     font-size: clamp(1rem, 4vw, 1.2rem);
-    font-weight: bold;
+    font-weight: 500;
+    color: #FF6B22; /* Dare Devil */
 }
 
 /* Juego 3: Mezcla de Colores */
@@ -201,39 +245,43 @@ span {
 }
 
 .color-select {
-    background-color: #333;
     padding: 0.5rem;
     min-width: 80px;
+    border-radius: 10px;
+    color: #FFFFFF;
+    font-weight: 500;
 }
 
-.color-select[data-color="magenta"] { background-color: #ff00ff; }
-.color-select[data-color="cyan"] { background-color: #00ffff; }
-.color-select[data-color="yellow"] { background-color: #ffff00; }
+.color-select[data-color="magenta"] { background-color: #CC415E; } /* Magenta */
+.color-select[data-color="cyan"] { background-color: #66D7D1; } /* Aqua (en lugar de cian) */
+.color-select[data-color="yellow"] { background-color: #E9CE2C; } /* Lemon */
 
 .color-select:hover {
-    filter: brightness(80%);
+    filter: brightness(90%);
 }
 
 .adjust {
-    background-color: #555;
+    background-color: #D8BFFF; /* Royal */
     width: 30px;
     height: 30px;
     padding: 0;
     font-size: 1.2rem;
     line-height: 30px;
+    border-radius: 50%;
+    color: #FFFFFF;
 }
 
 .adjust:hover {
-    background-color: #777;
+    background-color: #C5AFFF; /* Royal más oscuro */
 }
 
 .mix-container {
     width: clamp(120px, 50vw, 200px);
     height: clamp(120px, 50vw, 200px);
-    border: 2px solid #000;
-    border-radius: 5px;
+    border: 3px solid #F3CFC6; /* Blush */
+    border-radius: 15px;
     margin-bottom: 1rem;
-    background-color: #fff;
+    background-color: #FFFFFF;
     cursor: pointer;
     display: flex;
     align-items: center;
@@ -241,11 +289,11 @@ span {
 }
 
 #mixCanvas {
-    border: 2px solid #000;
-    border-radius: 5px;
+    border: 3px solid blueviolet;
+    border-radius: 15px;
     width: clamp(200px, 80vw, 300px);
     height: clamp(200px, 80vw, 300px);
-    background-color: #fff;
+    background-color: #FFFFFF;
     touch-action: none;
 }
 
@@ -263,8 +311,8 @@ span {
 .color-preview {
     width: clamp(100px, 40vw, 150px);
     height: clamp(100px, 40vw, 150px);
-    border: 2px solid #000;
-    border-radius: 5px;
+    border: 3px solid #E9CE2C; /* Lemon */
+    border-radius: 50%; /* Circular */
     margin-top: 0.5rem;
 }
 
@@ -288,8 +336,8 @@ span {
 .palette-color {
     width: clamp(60px, 15vw, 80px);
     height: clamp(60px, 15vw, 80px);
-    border: 2px solid #000;
-    border-radius: 5px;
+    border: 3px solid #66D7D1; /* Aqua */
+    border-radius: 50%; /* Circular */
     cursor: pointer;
     position: relative;
 }
@@ -300,11 +348,11 @@ span {
     top: 50%;
     left: 50%;
     transform: translate(-50%, -50%);
-    color: #fff;
+    color: #FFFFFF;
     font-size: 1.2rem;
     background: rgba(0, 0, 0, 0.5);
     padding: 0.2rem 0.5rem;
-    border-radius: 3px;
+    border-radius: 50%;
 }
 
 /* Juego 5: Cuadrícula de Colores */
@@ -317,21 +365,23 @@ span {
 }
 
 .grid-color {
-    background-color: #333;
     padding: 0.5rem;
     min-width: 60px;
+    border-radius: 10px;
+    color: #FFFFFF;
+    font-weight: 500;
 }
 
-.grid-color[data-color="red"] { background-color: #ff0000; }
-.grid-color[data-color="green"] { background-color: #00ff00; }
-.grid-color[data-color="blue"] { background-color: #0000ff; }
-.grid-color[data-color="black"] { background-color: #000000; }
-.grid-color[data-color="white"] { background-color: #ffffff; }
-.grid-color[data-color="random"] { background: linear-gradient(45deg, red, blue, green, yellow); }
-.grid-color[data-color="eraser"] { background-color: #ccc; }
+.grid-color[data-color="red"] { background-color: #f20a0a; } 
+.grid-color[data-color="green"] { background-color: #30bb13; } 
+.grid-color[data-color="blue"] { background-color: #2F41DD; } 
+.grid-color[data-color="black"] { background-color: #0c0c0c } 
+.grid-color[data-color="white"] { background-color: #FFFFFF; border: 2px solid #D8BFFF; color: #2F41DD; }
+.grid-color[data-color="random"] { background: linear-gradient(45deg, #FF600E, #2F41DD, #E9CE2C, #CC415E); }
+.grid-color[data-color="eraser"] { background-color: #F3CFC6; color: #CC415E; } 
 
 .grid-color:hover {
-    filter: brightness(80%);
+    filter: brightness(90%);
 }
 
 .grid-container {
@@ -339,29 +389,42 @@ span {
     grid-template-columns: repeat(25, 1fr);
     gap: 1px;
     width: clamp(250px, 90vw, 500px);
-    background-color: #000;
-    border: 2px solid #000;
-    border-radius: 5px;
+    background-color: #D8BFFF; /* Royal */
+    border: 3px solid #F2B805; /* Gold */
+    border-radius: 15px;
     margin-bottom: 1rem;
     touch-action: manipulation;
 }
 
 .grid-container.painting-active {
-    border-color: #00ff00;
-    box-shadow: 0 0 5px #00ff00;
+    border-color: #66D7D1; /* Aqua */
+    box-shadow: 0 0 5px #66D7D1;
 }
 
 .grid-square {
     width: 100%;
     padding-top: 100%;
-    background-color: #fff;
+    background-color: #FFFFFF;
+    border-radius: 5px; /* Bordes redondeados */
     transition: background-color 0.2s;
 }
 
 /* Media Queries para pantallas pequeñas */
 @media (max-width: 600px) {
     .container {
-        padding: 3%;
+        padding: 1.5rem;
+    }
+    .container::before {
+        width: 100px;
+        height: 100px;
+        top: -30px;
+        left: -30px;
+    }
+    .container::after {
+        width: 150px;
+        height: 150px;
+        bottom: -50px;
+        right: -50px;
     }
     button {
         width: 100%;
@@ -393,10 +456,22 @@ span {
 
 @media (max-width: 400px) {
     h1 {
-        font-size: clamp(1.2rem, 6vw, 1.5rem);
+        font-size: clamp(1.5rem, 6vw, 1.8rem);
     }
     p, label, span {
         font-size: clamp(0.8rem, 4vw, 0.9rem);
+    }
+    .container::before {
+        width: 80px;
+        height: 80px;
+        top: -20px;
+        left: -20px;
+    }
+    .container::after {
+        width: 120px;
+        height: 120px;
+        bottom: -40px;
+        right: -40px;
     }
     .grid-container {
         grid-template-columns: repeat(15, 1fr);

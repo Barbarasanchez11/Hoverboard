@@ -574,16 +574,17 @@ function paintSquare(e) {
     const square = e.target;
     let color;
     switch (selectedGridColor) {
-        case 'red': color = '#ff0000'; break;
-        case 'green': color = '#00ff00'; break;
-        case 'blue': color = '#0000ff'; break;
+        case 'red': color = '#FF6F61'; break; // Color rojo inspirado en la imagen
+        case 'green': color = '#6BFFB8'; break; // Color verde inspirado en la imagen
+        case 'blue': color = '#61AFFF'; break; // Color azul inspirado en la imagen
         case 'black': color = '#000000'; break;
         case 'white': color = '#ffffff'; break;
         case 'random': 
-            color = `rgb(${Math.floor(Math.random() * 256)}, ${Math.floor(Math.random() * 256)}, ${Math.floor(Math.random() * 256)})`;
+            const colors = ['#FF6F61', '#6BFFB8', '#61AFFF', '#FF61A6']; // Colores de la imagen
+            color = colors[Math.floor(Math.random() * colors.length)];
             break;
         case 'eraser': color = '#ffffff'; break;
-        default: color = '#ff0000';
+        default: color = '#FF6F61';
     }
     square.style.backgroundColor = color;
 }
@@ -606,6 +607,5 @@ clearGrid.addEventListener('click', () => {
     gridContainer.classList.remove('painting-active');
     gridMessage.textContent = 'Cuadrícula limpiada. Haz clic para activar pintura.';
 });
-
 
 showSection(menu);

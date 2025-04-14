@@ -22,24 +22,30 @@ time, mark, audio, video {
     font: inherit;
     vertical-align: baseline;
 }
+
 article, aside, details, figcaption, figure, 
 footer, header, hgroup, menu, nav, section {
     display: block;
 }
+
 body {
     line-height: 1;
 }
+
 ol, ul {
     list-style: none;
 }
+
 blockquote, q {
     quotes: none;
 }
+
 blockquote:before, blockquote:after,
 q:before, q:after {
     content: '';
     content: none;
 }
+
 table {
     border-collapse: collapse;
     border-spacing: 0;
@@ -47,7 +53,7 @@ table {
 
 /* Estilos generales */
 body {
-    background-color: #F6EDED; /* Fondo claro */
+    background: linear-gradient(135deg, #2c3e50, #3498db); /* Fondo degradado moderno */
     display: flex;
     align-items: center;
     justify-content: center;
@@ -66,9 +72,10 @@ body {
     width: 90%;
     max-width: 600px;
     padding: 2rem;
-    background-color: #FFFFFF; /* Fondo blanco */
+    background: rgba(255, 255, 255, 0.1); /* Fondo semi-transparente */
     border-radius: 20px;
-    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3); /* Sombra moderna */
+    backdrop-filter: blur(10px); /* Efecto de desenfoque */
     margin: 2rem auto;
     overflow: hidden;
 }
@@ -78,14 +85,14 @@ body {
 .container::after {
     content: '';
     position: absolute;
-    background-color: #F3CFC6; /* Blush */
     z-index: -1;
 }
 
 .container::before {
     width: 150px;
     height: 150px;
-    border-radius: 50%;
+    background: #FF6F61; /* Color rojo inspirado en la imagen */
+    clip-path: ellipse(40% 50% at 50% 50%); /* Forma elíptica */
     top: -50px;
     left: -50px;
     opacity: 0.7;
@@ -94,19 +101,20 @@ body {
 .container::after {
     width: 200px;
     height: 200px;
-    border-radius: 50%;
+    background: #61AFFF; /* Color azul inspirado en la imagen */
+    clip-path: polygon(50% 0%, 100% 50%, 50% 100%, 0% 50%); /* Forma de diamante */
     bottom: -80px;
     right: -80px;
-    background-color: blueviolet;
     opacity: 0.7;
 }
 
 h1 {
-    color: #2F41DD; /* Electric Blue */
+    color: #3498db; /* Electric Blue */
     font-size: clamp(1.8rem, 5vw, 2.5rem);
     font-weight: 700;
     margin-bottom: 1.5rem;
     text-align: center;
+    text-shadow: 2px 2px 5px rgba(0, 0, 0, 0.2);
 }
 
 button {
@@ -117,14 +125,16 @@ button {
     border: none;
     border-radius: 15px;
     cursor: pointer;
-    transition: transform 0.2s, background-color 0.3s;
+    transition: transform 0.2s, background-color 0.3s, box-shadow 0.3s;
     margin: 0.3rem;
     font-weight: 500;
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
 }
 
 button:hover {
     transform: scale(1.05);
     background-color: #E0550C; /* Tangerine más oscuro */
+    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.3);
 }
 
 p {
@@ -159,8 +169,12 @@ p {
     width: clamp(100px, 40vw, 150px);
     height: clamp(100px, 40vw, 150px);
     border: 3px solid #D8BFFF; /* Royal */
-    border-radius: 15px;
-    transition: background-color 0.3s;
+    clip-path: polygon(30% 0%, 70% 0%, 100% 30%, 100% 70%, 70% 100%, 30% 100%, 0% 70%, 0% 30%); /* Polígono complejo */
+    transition: background-color 0.3s, transform 0.2s;
+}
+
+.color-box:hover {
+    transform: scale(1.05);
 }
 
 .sliders {
@@ -206,7 +220,7 @@ span {
     width: clamp(80px, 20vw, 100px);
     height: clamp(80px, 20vw, 100px);
     border: 3px solid #F2B805; /* Gold */
-    border-radius: 50%; /* Circular */
+    border-radius: 0; /* Quitamos el círculo por defecto */
     cursor: pointer;
     transition: transform 0.2s;
 }
@@ -215,11 +229,28 @@ span {
     transform: scale(1.1);
 }
 
+/* Formas personalizadas para las opciones de color */
+.color-options .color-option:nth-child(1) {
+    clip-path: polygon(50% 0%, 100% 50%, 50% 100%, 0% 50%); /* Diamante */
+}
+
+.color-options .color-option:nth-child(2) {
+    clip-path: ellipse(40% 50% at 50% 50%); /* Elipse */
+}
+
+.color-options .color-option:nth-child(3) {
+    clip-path: polygon(20% 0%, 80% 0%, 100% 50%, 80% 100%, 20% 100%, 0% 50%); /* Polígono irregular */
+}
+
+.color-options .color-option:nth-child(4) {
+    clip-path: polygon(0% 0%, 100% 0%, 100% 70%, 70% 100%, 0% 100%); /* Corte diagonal */
+}
+
 #targetColorDisplay {
     width: clamp(120px, 50vw, 200px);
     height: clamp(120px, 50vw, 200px);
     border: 3px solid #F2B805; /* Gold */
-    border-radius: 50%; /* Circular */
+    clip-path: ellipse(40% 50% at 50% 50%); /* Elipse */
     margin-bottom: 1rem;
 }
 
@@ -247,17 +278,32 @@ span {
 .color-select {
     padding: 0.5rem;
     min-width: 80px;
-    border-radius: 10px;
+    border: none; /* Quitamos el border por defecto */
     color: #FFFFFF;
     font-weight: 500;
+    transition: transform 0.2s, box-shadow 0.3s;
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2); /* Sombra inspirada en Jazzlab */
 }
 
-.color-select[data-color="magenta"] { background-color: #CC415E; } /* Magenta */
-.color-select[data-color="cyan"] { background-color: #66D7D1; } /* Aqua (en lugar de cian) */
-.color-select[data-color="yellow"] { background-color: #E9CE2C; } /* Lemon */
+/* Formas personalizadas y estéticas para los botones de color */
+.color-select[data-color="magenta"] { 
+    background-color: #CC415E; /* Magenta */
+    clip-path: polygon(50% 0%, 100% 50%, 50% 100%, 0% 50%); /* Diamante */
+}
+
+.color-select[data-color="cyan"] { 
+    background-color: #66D7D1; /* Aqua (en lugar de cian) */
+    clip-path: ellipse(40% 50% at 50% 50%); /* Elipse */
+}
+
+.color-select[data-color="yellow"] { 
+    background-color: #E9CE2C; /* Lemon */
+    clip-path: polygon(20% 0%, 80% 0%, 100% 50%, 80% 100%, 20% 100%, 0% 50%); /* Polígono irregular */
+}
 
 .color-select:hover {
-    filter: brightness(90%);
+    transform: scale(1.05);
+    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.3);
 }
 
 .adjust {
@@ -269,17 +315,19 @@ span {
     line-height: 30px;
     border-radius: 50%;
     color: #FFFFFF;
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
 }
 
 .adjust:hover {
     background-color: #C5AFFF; /* Royal más oscuro */
+    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.3);
 }
 
 .mix-container {
     width: clamp(120px, 50vw, 200px);
     height: clamp(120px, 50vw, 200px);
     border: 3px solid #F3CFC6; /* Blush */
-    border-radius: 15px;
+    clip-path: polygon(30% 0%, 70% 0%, 100% 30%, 100% 70%, 70% 100%, 30% 100%, 0% 70%, 0% 30%); /* Polígono complejo */
     margin-bottom: 1rem;
     background-color: #FFFFFF;
     cursor: pointer;
@@ -289,8 +337,8 @@ span {
 }
 
 #mixCanvas {
-    border: 3px solid blueviolet;
-    border-radius: 15px;
+    border: 3px solid #61AFFF; /* Azul inspirado en la imagen */
+    /* Quitamos clip-path para que sea un cuadrado completo */
     width: clamp(200px, 80vw, 300px);
     height: clamp(200px, 80vw, 300px);
     background-color: #FFFFFF;
@@ -312,7 +360,7 @@ span {
     width: clamp(100px, 40vw, 150px);
     height: clamp(100px, 40vw, 150px);
     border: 3px solid #E9CE2C; /* Lemon */
-    border-radius: 50%; /* Circular */
+    clip-path: ellipse(40% 50% at 50% 50%); /* Elipse */
     margin-top: 0.5rem;
 }
 
@@ -337,7 +385,7 @@ span {
     width: clamp(60px, 15vw, 80px);
     height: clamp(60px, 15vw, 80px);
     border: 3px solid #66D7D1; /* Aqua */
-    border-radius: 50%; /* Circular */
+    clip-path: polygon(50% 0%, 100% 50%, 50% 100%, 0% 50%); /* Diamante */
     cursor: pointer;
     position: relative;
 }
@@ -367,21 +415,55 @@ span {
 .grid-color {
     padding: 0.5rem;
     min-width: 60px;
-    border-radius: 10px;
+    border: none; /* Quitamos el border por defecto */
     color: #FFFFFF;
     font-weight: 500;
+    transition: transform 0.2s, box-shadow 0.3s;
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2); /* Sombra inspirada en Jazzlab */
 }
 
-.grid-color[data-color="red"] { background-color: #f20a0a; } 
-.grid-color[data-color="green"] { background-color: #30bb13; } 
-.grid-color[data-color="blue"] { background-color: #2F41DD; } 
-.grid-color[data-color="black"] { background-color: #0c0c0c } 
-.grid-color[data-color="white"] { background-color: #FFFFFF; border: 2px solid #D8BFFF; color: #2F41DD; }
-.grid-color[data-color="random"] { background: linear-gradient(45deg, #FF600E, #2F41DD, #E9CE2C, #CC415E); }
-.grid-color[data-color="eraser"] { background-color: #F3CFC6; color: #CC415E; } 
+/* Formas personalizadas y estéticas para los botones de color */
+.grid-color[data-color="red"] { 
+    background-color: #FF6F61; /* Rojo inspirado en la imagen */
+    clip-path: polygon(50% 0%, 100% 50%, 50% 100%, 0% 50%); /* Diamante */
+}
+
+.grid-color[data-color="green"] { 
+    background-color: #6BFFB8; /* Verde inspirado en la imagen */
+    clip-path: ellipse(40% 50% at 50% 50%); /* Elipse */
+}
+
+.grid-color[data-color="blue"] { 
+    background-color: #61AFFF; /* Azul inspirado en la imagen */
+    clip-path: polygon(20% 0%, 80% 0%, 100% 50%, 80% 100%, 20% 100%, 0% 50%); /* Polígono irregular */
+}
+
+.grid-color[data-color="black"] { 
+    background-color: #0c0c0c;
+    clip-path: polygon(0% 0%, 100% 0%, 100% 70%, 70% 100%, 0% 100%); /* Corte diagonal */
+}
+
+.grid-color[data-color="white"] { 
+    background-color: #FFFFFF; 
+    border: 2px solid #D8BFFF; 
+    color: #2F41DD;
+    clip-path: polygon(50% 0%, 100% 50%, 50% 100%, 0% 50%); /* Diamante */
+}
+
+.grid-color[data-color="random"] { 
+    background: linear-gradient(45deg, #FF6F61, #61AFFF, #FF61A6, #6BFFB8); /* Colores de la imagen */
+    clip-path: ellipse(40% 50% at 50% 50%); /* Elipse */
+}
+
+.grid-color[data-color="eraser"] { 
+    background-color: #F3CFC6; 
+    color: #CC415E;
+    clip-path: polygon(20% 0%, 80% 0%, 100% 50%, 80% 100%, 20% 100%, 0% 50%); /* Polígono irregular */
+}
 
 .grid-color:hover {
-    filter: brightness(90%);
+    transform: scale(1.05);
+    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.3);
 }
 
 .grid-container {
@@ -391,6 +473,7 @@ span {
     width: clamp(250px, 90vw, 500px);
     background-color: #D8BFFF; /* Royal */
     border: 3px solid #F2B805; /* Gold */
+    /* Quitamos clip-path para que sea un cuadrado completo */
     border-radius: 15px;
     margin-bottom: 1rem;
     touch-action: manipulation;

@@ -1,15 +1,36 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="es">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="style.css">
-    <title>Document</title>
+    <title>Juego de Combinación de Colores</title>
 </head>
 <body>
-
-    <div class="container" id="container"></div>
+    <div class="container">
+        <h1>Juego de Combinación de Colores</h1>
+        <div class="color-display">
+            <div class="color-box" id="targetColor"></div>
+            <div class="color-box" id="userColor"></div>
+        </div>
+        <div class="sliders">
+            <label>
+                R: <input type="range" id="redSlider" min="0" max="255" value="0">
+                <span id="redValue">0</span>
+            </label>
+            <label>
+                G: <input type="range" id="greenSlider" min="0" max="255" value="0">
+                <span id="greenValue">0</span>
+            </label>
+            <label>
+                B: <input type="range" id="blueSlider" min="0" max="255" value="0">
+                <span id="blueValue">0</span>
+            </label>
+        </div>
+        <button id="submitButton">Enviar Color</button>
+        <p id="score">Puntuación: 0</p>
+        <p id="message"></p>
+    </div>
     <script src="script.js"></script>
-    
 </body>
 </html>

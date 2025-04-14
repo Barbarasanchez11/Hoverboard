@@ -3,12 +3,15 @@ const menu = document.getElementById('menu');
 const colorMatchGame = document.getElementById('colorMatchGame');
 const guessColorGame = document.getElementById('guessColorGame');
 const colorMixGame = document.getElementById('colorMixGame');
+const creativeModeGame = document.getElementById('creativeModeGame');
 const colorMatchButton = document.getElementById('colorMatchButton');
 const guessColorButton = document.getElementById('guessColorButton');
 const colorMixButton = document.getElementById('colorMixButton');
+const creativeModeButton = document.getElementById('creativeModeButton');
 const backToMenuMatch = document.getElementById('backToMenuMatch');
 const backToMenuGuess = document.getElementById('backToMenuGuess');
 const backToMenuMix = document.getElementById('backToMenuMix');
+const backToMenuCreative = document.getElementById('backToMenuCreative');
 
 // Función para mostrar solo una sección
 function showSection(section) {
@@ -16,6 +19,7 @@ function showSection(section) {
     colorMatchGame.style.display = 'none';
     guessColorGame.style.display = 'none';
     colorMixGame.style.display = 'none';
+    creativeModeGame.style.display = 'none';
     section.style.display = 'flex';
 }
 
@@ -32,9 +36,14 @@ colorMixButton.addEventListener('click', () => {
     showSection(colorMixGame);
     initColorMixGame();
 });
+creativeModeButton.addEventListener('click', () => {
+    showSection(creativeModeGame);
+    initCreativeModeGame();
+});
 backToMenuMatch.addEventListener('click', () => showSection(menu));
 backToMenuGuess.addEventListener('click', () => showSection(menu));
 backToMenuMix.addEventListener('click', () => showSection(menu));
+backToMenuCreative.addEventListener('click', () => showSection(menu));
 
 // --- Juego 1: Combinación de Colores ---
 const targetColorBox = document.getElementById('targetColor');
@@ -197,14 +206,16 @@ let currentColor = [255, 0, 0]; // Rojo por defecto
 let isDrawing = false;
 let ctx;
 
+function clamp(min, val, max) {
+    return Math.min(Math.max(val, min), max);
+}
+
 function initColorMixGame() {
-    // Inicializar lienzo con dimensiones responsivas
     mixCanvas.width = clamp(200, window.innerWidth * 0.8, 300);
     mixCanvas.height = clamp(200, window.innerWidth * 0.8, 300);
     ctx = mixCanvas.getContext('2d');
     clearCanvasFunc();
 
-    // Selección de color
     colorSelectButtons.forEach(button => {
         button.addEventListener('click', () => {
             const color = button.getAttribute('data-color');
@@ -215,16 +226,13 @@ function initColorMixGame() {
         });
     });
 
-    // Limpieza del lienzo
     clearCanvas.addEventListener('click', clearCanvasFunc);
 
-    // Eventos de dibujo
     mixCanvas.addEventListener('mousedown', startDrawing);
     mixCanvas.addEventListener('mousemove', draw);
     mixCanvas.addEventListener('mouseup', stopDrawing);
     mixCanvas.addEventListener('mouseleave', stopDrawing);
 
-    // Eventos táctiles
     mixCanvas.addEventListener('touchstart', (e) => {
         e.preventDefault();
         startDrawing(e);
@@ -235,16 +243,11 @@ function initColorMixGame() {
     });
     mixCanvas.addEventListener('touchend', stopDrawing);
 
-    // Ajustar lienzo al redimensionar
     window.addEventListener('resize', () => {
         mixCanvas.width = clamp(200, window.innerWidth * 0.8, 300);
         mixCanvas.height = clamp(200, window.innerWidth * 0.8, 300);
         clearCanvasFunc();
     });
-}
-
-function clamp(min, val, max) {
-    return Math.min(Math.max(val, min), max);
 }
 
 function clearCanvasFunc() {
@@ -261,7 +264,7 @@ function startDrawing(e) {
 
 function stopDrawing() {
     isDrawing = false;
-    ctx.beginPath(); // Evitar líneas continuas
+    ctx.beginPath();
 }
 
 function draw(e) {
@@ -285,7 +288,6 @@ function updateResultColor() {
     let r = 0, g = 0, b = 0, count = 0;
 
     for (let i = 0; i < data.length; i += 4) {
-        // Excluir fondo blanco
         if (data[i + 3] > 0 && !(data[i] === 255 && data[i + 1] === 255 && data[i + 2] === 255)) {
             r += data[i];
             g += data[i + 1];
@@ -300,10 +302,9 @@ function updateResultColor() {
         b = Math.round(b / count);
         mixResult.textContent = `Color resultante: RGB(${r}, ${g}, ${b})`;
 
-        // Detectar combinaciones comunes con chroma.js
         try {
             const hsl = chroma([r, g, b]).hsl();
-            if (hsl[1] > 0.2) { // Evitar grises
+            if (hsl[1] > 0.2) {
                 if (Math.abs(hsl[0] - 300) < 30) {
                     mixMessage.textContent = '¡Has creado un tono morado (rojo + azul)!';
                 } else if (Math.abs(hsl[0] - 60) < 30) {
@@ -321,6 +322,149 @@ function updateResultColor() {
         }
     }
 }
+
+// --- Juego 4: Modo Creativo ---
+const creativeRedSlider = document.getElementById('creativeRedSlider');
+const creativeGreenSlider = document.getElementById('creativeGreenSlider');
+const creativeBlueSlider = document.getElementById('creativeBlueSlider');
+const creativeRedValue = document.getElementById('creativeRedValue');
+const creativeGreenValue = document.getElementById('creativeGreenValue');
+const creativeBlueValue = document.getElementById('creativeBlueValue');
+const colorPreview = document.getElementById('colorPreview');
+const addColorButton = document.getElementById('addColor');
+const clearPaletteButton = document.getElementById('clearPalette');
+const savePaletteButton = document.getElementById('savePalette');
+const sharePaletteButton = document.getElementById('sharePalette');
+const exportPaletteButton = document.getElementById('exportPalette');
+const paletteContainer = document.getElementById('palette');
+const creativeMessage = document.getElementById('creativeMessage');
+
+let palette = [];
+
+function initCreativeModeGame() {
+    palette = [];
+    creativeRedSlider.value = 0;
+    creativeGreenSlider.value = 0;
+    creativeBlueSlider.value = 0;
+    updateColorPreview();
+    renderPalette();
+    creativeMessage.textContent = 'Ajusta los sliders para crear un color y añádelo a tu paleta.';
+    
+    // Cargar paleta desde URL si existe
+    const urlParams = new URLSearchParams(window.location.search);
+    const colors = urlParams.get('colors');
+    if (colors) {
+        palette = colors.split(',').map(hex => `#${hex}`);
+        renderPalette();
+        creativeMessage.textContent = 'Paleta cargada desde el enlace.';
+    }
+    
+    // Cargar paleta guardada desde localStorage
+    const savedPalettes = JSON.parse(localStorage.getItem('palettes') || '[]');
+    if (savedPalettes.length > 0) {
+        creativeMessage.textContent += ' Tienes paletas guardadas disponibles.';
+    }
+}
+
+function updateColorPreview() {
+    const r = parseInt(creativeRedSlider.value);
+    const g = parseInt(creativeGreenSlider.value);
+    const b = parseInt(creativeBlueSlider.value);
+    colorPreview.style.backgroundColor = `rgb(${r}, ${g}, ${b})`;
+    creativeRedValue.textContent = r;
+    creativeGreenValue.textContent = g;
+    creativeBlueValue.textContent = b;
+}
+
+function rgbToHex(r, g, b) {
+    return ((r << 16) | (g << 8) | b).toString(16).padStart(6, '0');
+}
+
+function renderPalette() {
+    paletteContainer.innerHTML = '';
+    palette.forEach((color, index) => {
+        const colorBox = document.createElement('div');
+        colorBox.classList.add('palette-color');
+        colorBox.style.backgroundColor = color;
+        colorBox.addEventListener('click', () => {
+            palette.splice(index, 1);
+            renderPalette();
+            creativeMessage.textContent = 'Color eliminado de la paleta.';
+        });
+        paletteContainer.appendChild(colorBox);
+    });
+}
+
+function addColorToPalette() {
+    if (palette.length >= 6) {
+        creativeMessage.textContent = '¡Paleta llena! Elimina un color para añadir otro.';
+        return;
+    }
+    const r = parseInt(creativeRedSlider.value);
+    const g = parseInt(creativeGreenSlider.value);
+    const b = parseInt(creativeBlueSlider.value);
+    const hex = `#${rgbToHex(r, g, b)}`;
+    palette.push(hex);
+    renderPalette();
+    creativeMessage.textContent = 'Color añadido a la paleta.';
+}
+
+function clearPalette() {
+    palette = [];
+    renderPalette();
+    creativeMessage.textContent = 'Paleta limpiada.';
+}
+
+function savePalette() {
+    if (palette.length === 0) {
+        creativeMessage.textContent = 'La paleta está vacía, añade colores primero.';
+        return;
+    }
+    let savedPalettes = JSON.parse(localStorage.getItem('palettes') || '[]');
+    savedPalettes.push(palette);
+    localStorage.setItem('palettes', JSON.stringify(savedPalettes));
+    creativeMessage.textContent = 'Paleta guardada en el almacenamiento local.';
+}
+
+function sharePalette() {
+    if (palette.length === 0) {
+        creativeMessage.textContent = 'La paleta está vacía, añade colores primero.';
+        return;
+    }
+    const hexColors = palette.map(color => color.replace('#', ''));
+    const url = `${window.location.origin}${window.location.pathname}?colors=${hexColors.join(',')}`;
+    navigator.clipboard.writeText(url).then(() => {
+        creativeMessage.textContent = 'Enlace copiado al portapapeles.';
+    }).catch(() => {
+        creativeMessage.textContent = 'Error al copiar el enlace.';
+    });
+}
+
+function exportPalette() {
+    if (palette.length === 0) {
+        creativeMessage.textContent = 'La paleta está vacía, añade colores primero.';
+        return;
+    }
+    html2canvas(paletteContainer).then(canvas => {
+        const link = document.createElement('a');
+        link.download = 'palette.png';
+        link.href = canvas.toDataURL('image/png');
+        link.click();
+        creativeMessage.textContent = 'Paleta exportada como PNG.';
+    }).catch(() => {
+        creativeMessage.textContent = 'Error al exportar la paleta.';
+    });
+}
+
+// Event listeners para Modo Creativo
+creativeRedSlider.addEventListener('input', updateColorPreview);
+creativeGreenSlider.addEventListener('input', updateColorPreview);
+creativeBlueSlider.addEventListener('input', updateColorPreview);
+addColorButton.addEventListener('click', addColorToPalette);
+clearPaletteButton.addEventListener('click', clearPalette);
+savePaletteButton.addEventListener('click', savePalette);
+sharePaletteButton.addEventListener('click', sharePalette);
+exportPaletteButton.addEventListener('click', exportPalette);
 
 // Mostrar menú al cargar
 showSection(menu);

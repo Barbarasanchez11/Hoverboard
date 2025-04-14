@@ -12,6 +12,7 @@
         <button id="colorMatchButton">Jugar Combinación de Colores</button>
         <button id="guessColorButton">Jugar Adivina el Color</button>
         <button id="colorMixButton">Jugar Mezcla de Colores</button>
+        <button id="creativeModeButton">Jugar Modo Creativo</button>
     </div>
 
     <!-- Juego 1: Combinación de Colores -->
@@ -67,7 +68,38 @@
         <button id="backToMenuMix">Volver al Menú</button>
     </div>
 
+    <!-- Juego 4: Modo Creativo -->
+    <div class="container" id="creativeModeGame" style="display: none;">
+        <h1>Modo Creativo</h1>
+        <div class="color-picker">
+            <label>
+                R: <input type="range" id="creativeRedSlider" min="0" max="255" value="0">
+                <span id="creativeRedValue">0</span>
+            </label>
+            <label>
+                G: <input type="range" id="creativeGreenSlider" min="0" max="255" value="0">
+                <span id="creativeGreenValue">0</span>
+            </label>
+            <label>
+                B: <input type="range" id="creativeBlueSlider" min="0" max="255" value="0">
+                <span id="creativeBlueValue">0</span>
+            </label>
+            <div class="color-preview" id="colorPreview"></div>
+        </div>
+        <div class="palette-controls">
+            <button id="addColor">Añadir Color</button>
+            <button id="clearPalette">Limpiar Paleta</button>
+            <button id="savePalette">Guardar Paleta</button>
+            <button id="sharePalette">Compartir Paleta</button>
+            <button id="exportPalette">Exportar como PNG</button>
+        </div>
+        <div class="palette" id="palette"></div>
+        <p id="creativeMessage"></p>
+        <button id="backToMenuCreative">Volver al Menú</button>
+    </div>
+
     <script src="https://cdnjs.cloudflare.com/ajax/libs/chroma-js/2.4.2/chroma.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
     <script src="script.js"></script>
 </body>
 </html>

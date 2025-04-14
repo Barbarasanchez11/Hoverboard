@@ -207,6 +207,64 @@ span {
     touch-action: none;
 }
 
+/* Juego 4: Modo Creativo */
+.color-picker {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 0.5rem;
+    margin-bottom: 1rem;
+    width: 100%;
+    max-width: 300px;
+}
+
+.color-preview {
+    width: clamp(100px, 40vw, 150px);
+    height: clamp(100px, 40vw, 150px);
+    border: 2px solid #000;
+    border-radius: 5px;
+    margin-top: 0.5rem;
+}
+
+.palette-controls {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+    justify-content: center;
+    margin-bottom: 1rem;
+}
+
+.palette {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+    justify-content: center;
+    width: 100%;
+    max-width: 400px;
+}
+
+.palette-color {
+    width: clamp(60px, 15vw, 80px);
+    height: clamp(60px, 15vw, 80px);
+    border: 2px solid #000;
+    border-radius: 5px;
+    cursor: pointer;
+    position: relative;
+}
+
+.palette-color:hover::after {
+    content: 'X';
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    color: #fff;
+    font-size: 1.2rem;
+    background: rgba(0, 0, 0, 0.5);
+    padding: 0.2rem 0.5rem;
+    border-radius: 3px;
+}
+
 /* Media Queries para pantallas pequeñas */
 @media (max-width: 600px) {
     .container {
@@ -216,9 +274,13 @@ span {
         width: 100%;
         max-width: 250px;
     }
-    .color-box, .color-option, #mixCanvas {
+    .color-box, .color-option, #mixCanvas, .color-preview {
         width: clamp(80px, 45vw, 120px);
         height: clamp(80px, 45vw, 120px);
+    }
+    .palette-color {
+        width: clamp(50px, 20vw, 60px);
+        height: clamp(50px, 20vw, 60px);
     }
 }
 

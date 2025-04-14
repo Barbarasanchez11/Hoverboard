@@ -57,14 +57,32 @@
     <div class="container" id="colorMixGame" style="display: none;">
         <h1>Mezcla de Colores</h1>
         <div class="mix-controls">
-            <button class="color-select" data-color="red">Rojo</button>
-            <button class="color-select" data-color="green">Verde</button>
-            <button class="color-select" data-color="blue">Azul</button>
-            <button id="clearCanvas">Limpiar</button>
+            <div class="color-control">
+                <button class="color-select" data-color="magenta">Magenta</button>
+                <button class="adjust" data-color="magenta" data-action="plus">+</button>
+                <button class="adjust" data-color="magenta" data-action="minus">-</button>
+                <span id="magentaAmount">0</span>
+            </div>
+            <div class="color-control">
+                <button class="color-select" data-color="cyan">Cian</button>
+                <button class="adjust" data-color="cyan" data-action="plus">+</button>
+                <button class="adjust" data-color="cyan" data-action="minus">-</button>
+                <span id="cyanAmount">0</span>
+            </div>
+            <div class="color-control">
+                <button class="color-select" data-color="yellow">Amarillo</button>
+                <button class="adjust" data-color="yellow" data-action="plus">+</button>
+                <button class="adjust" data-color="yellow" data-action="minus">-</button>
+                <span id="yellowAmount">0</span>
+            </div>
+            <button id="clearMix">Limpiar Mezcla</button>
+        </div>
+        <div class="mix-container" id="mixContainer">
+            <p id="mixAmounts">Magenta: 0, Cian: 0, Amarillo: 0</p>
         </div>
         <canvas id="mixCanvas"></canvas>
-        <p id="mixResult">Color resultante: RGB(0, 0, 0)</p>
-        <p id="mixMessage"></p>
+        <p id="mixResult">Tono seleccionado: Ninguno</p>
+        <p id="mixMessage">Añade colores al recipiente para crear un tono.</p>
         <button id="backToMenuMix">Volver al Menú</button>
     </div>
 

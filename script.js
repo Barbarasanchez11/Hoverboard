@@ -203,14 +203,23 @@ function checkGuessColor(selectedColor) {
 
 // --- Juego 3: Mezcla de Colores ---
 const mixCanvas = document.getElementById('mixCanvas');
+const mixContainer = document.getElementById('mixContainer');
 const mixResult = document.getElementById('mixResult');
 const mixMessage = document.getElementById('mixMessage');
-const clearCanvas = document.getElementById('clearCanvas');
+const mixAmounts = document.getElementById('mixAmounts');
+const clearMix = document.getElementById('clearMix');
+const magentaAmount = document.getElementById('magentaAmount');
+const cyanAmount = document.getElementById('cyanAmount');
+const yellowAmount = document.getElementById('yellowAmount');
 const colorSelectButtons = document.querySelectorAll('.color-select');
+const adjustButtons = document.querySelectorAll('.adjust');
 
-let currentColor = [255, 0, 0]; // Rojo por defecto
+let mix = { magenta: 0, cyan: 0, yellow: 0 };
+let selectedColor = null;
 let isDrawing = false;
 let ctx;
+let lastClickTime = 0;
+const DOUBLE_CLICK_THRESHOLD = 300; // ms
 
 function clamp(min, val, max) {
     return Math.min(Math.max(val, min), max);
@@ -220,19 +229,48 @@ function initColorMixGame() {
     mixCanvas.width = clamp(200, window.innerWidth * 0.8, 300);
     mixCanvas.height = clamp(200, window.innerWidth * 0.8, 300);
     ctx = mixCanvas.getContext('2d');
-    clearCanvasFunc();
+    clearMixFunc();
 
     colorSelectButtons.forEach(button => {
-        button.addEventListener('click', () => {
+        button.addEventListener('click', (e) => {
+            const now = Date.now();
             const color = button.getAttribute('data-color');
-            currentColor = color === 'red' ? [255, 0, 0] :
-                          color === 'green' ? [0, 255, 0] :
-                          [0, 0, 255];
-            mixMessage.textContent = `Pintando con ${color === 'red' ? 'rojo' : color === 'green' ? 'verde' : 'azul'}.`;
+            if (now - lastClickTime < DOUBLE_CLICK_THRESHOLD) {
+                // Doble clic: añadir 2 unidades
+                mix[color] = clamp(0, mix[color] + 2, 10);
+                mixMessage.textContent = `Añadiste el doble de ${color}.`;
+            } else {
+                // Clic simple: añadir 1 unidad
+                mix[color] = clamp(0, mix[color] + 1, 10);
+                mixMessage.textContent = `Añadiste ${color}.`;
+            }
+            lastClickTime = now;
+            updateMix();
         });
     });
 
-    clearCanvas.addEventListener('click', clearCanvasFunc);
+    adjustButtons.forEach(button => {
+        button.addEventListener('click', () => {
+            const color = button.getAttribute('data-color');
+            const action = button.getAttribute('data-action');
+            mix[color] = clamp(0, mix[color] + (action === 'plus' ? 1 : -1), 10);
+            mixMessage.textContent = `${action === 'plus' ? 'Añadiste' : 'Quitaste'} ${color}.`;
+            updateMix();
+        });
+    });
+
+    mixContainer.addEventListener('click', () => {
+        if (mix.magenta + mix.cyan + mix.yellow === 0) {
+            mixMessage.textContent = 'Añade colores al recipiente primero.';
+            return;
+        }
+        const mixedColor = calculateMixedColor();
+        selectedColor = mixedColor.hex();
+        mixMessage.textContent = 'Tono seleccionado, ¡pinta en el lienzo!';
+        mixResult.textContent = `Tono seleccionado: ${selectedColor}`;
+    });
+
+    clearMix.addEventListener('click', clearMixFunc);
 
     mixCanvas.addEventListener('mousedown', startDrawing);
     mixCanvas.addEventListener('mousemove', draw);
@@ -252,18 +290,69 @@ function initColorMixGame() {
     window.addEventListener('resize', () => {
         mixCanvas.width = clamp(200, window.innerWidth * 0.8, 300);
         mixCanvas.height = clamp(200, window.innerWidth * 0.8, 300);
-        clearCanvasFunc();
+        clearMixFunc();
     });
 }
 
-function clearCanvasFunc() {
+function clearMixFunc() {
+    mix = { magenta: 0, cyan: 0, yellow: 0 };
+    selectedColor = null;
     ctx.fillStyle = '#fff';
     ctx.fillRect(0, 0, mixCanvas.width, mixCanvas.height);
-    mixResult.textContent = 'Color resultante: RGB(0, 0, 0)';
-    mixMessage.textContent = 'Selecciona un color y pinta en el lienzo.';
+    updateMix();
+    mixResult.textContent = 'Tono seleccionado: Ninguno';
+    mixMessage.textContent = 'Añade colores al recipiente para crear un tono.';
+}
+
+function updateMix() {
+    magentaAmount.textContent = mix.magenta;
+    cyanAmount.textContent = mix.cyan;
+    yellowAmount.textContent = mix.yellow;
+    mixAmounts.textContent = `Magenta: ${mix.magenta}, Cian: ${mix.cyan}, Amarillo: ${mix.yellow}`;
+    
+    if (mix.magenta + mix.cyan + mix.yellow === 0) {
+        mixContainer.style.backgroundColor = '#fff';
+        return;
+    }
+    
+    const mixedColor = calculateMixedColor();
+    mixContainer.style.backgroundColor = mixedColor.hex();
+}
+
+function calculateMixedColor() {
+    const total = mix.magenta + mix.cyan + mix.yellow;
+    if (total === 0) return chroma('#fff');
+    
+    const colors = [];
+    const weights = [];
+    
+    if (mix.magenta > 0) {
+        colors.push('#ff00ff');
+        weights.push(mix.magenta);
+    }
+    if (mix.cyan > 0) {
+        colors.push('#00ffff');
+        weights.push(mix.cyan);
+    }
+    if (mix.yellow > 0) {
+        colors.push('#ffff00');
+        weights.push(mix.yellow);
+    }
+    
+    // Mezcla ponderada usando chroma.js
+    let result = colors[0];
+    for (let i = 1; i < colors.length; i++) {
+        result = chroma.mix(result, colors[i], weights[i] / (weights[i-1] + weights[i]), 'rgb');
+    }
+    
+    return chroma(result);
 }
 
 function startDrawing(e) {
+    if (!selectedColor) {
+        mixMessage.textContent = 'Selecciona un tono haciendo clic en el recipiente.';
+        return;
+    }
     isDrawing = true;
     draw(e);
 }
@@ -280,53 +369,10 @@ function draw(e) {
     const x = (e.clientX || (e.touches && e.touches[0].clientX)) - rect.left;
     const y = (e.clientY || (e.touches && e.touches[0].clientY)) - rect.top;
 
-    ctx.fillStyle = `rgb(${currentColor[0]}, ${currentColor[1]}, ${currentColor[2]})`;
+    ctx.fillStyle = selectedColor;
     ctx.beginPath();
     ctx.arc(x, y, 10, 0, Math.PI * 2);
     ctx.fill();
-
-    updateResultColor();
-}
-
-function updateResultColor() {
-    const imageData = ctx.getImageData(0, 0, mixCanvas.width, mixCanvas.height);
-    const data = imageData.data;
-    let r = 0, g = 0, b = 0, count = 0;
-
-    for (let i = 0; i < data.length; i += 4) {
-        if (data[i + 3] > 0 && !(data[i] === 255 && data[i + 1] === 255 && data[i + 2] === 255)) {
-            r += data[i];
-            g += data[i + 1];
-            b += data[i + 2];
-            count++;
-        }
-    }
-
-    if (count > 0) {
-        r = Math.round(r / count);
-        g = Math.round(g / count);
-        b = Math.round(b / count);
-        mixResult.textContent = `Color resultante: RGB(${r}, ${g}, ${b})`;
-
-        try {
-            const hsl = chroma([r, g, b]).hsl();
-            if (hsl[1] > 0.2) {
-                if (Math.abs(hsl[0] - 300) < 30) {
-                    mixMessage.textContent = '¡Has creado un tono morado (rojo + azul)!';
-                } else if (Math.abs(hsl[0] - 60) < 30) {
-                    mixMessage.textContent = '¡Has creado un tono amarillo (rojo + verde)!';
-                } else if (Math.abs(hsl[0] - 180) < 30) {
-                    mixMessage.textContent = '¡Has creado un tono cian (verde + azul)!';
-                } else {
-                    mixMessage.textContent = `Mezcla personalizada: RGB(${r}, ${g}, ${b})`;
-                }
-            } else {
-                mixMessage.textContent = 'Mezcla poco definida, ¡prueba combinar más colores!';
-            }
-        } catch (e) {
-            mixMessage.textContent = 'Error al calcular el color, sigue pintando.';
-        }
-    }
 }
 
 // --- Juego 4: Modo Creativo ---
@@ -469,5 +515,5 @@ savePaletteButton.addEventListener('click', savePalette);
 sharePaletteButton.addEventListener('click', sharePalette);
 exportPaletteButton.addEventListener('click', exportPalette);
 
-
+// Mostrar menú al cargar
 showSection(menu);

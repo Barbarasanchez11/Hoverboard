@@ -4,11 +4,19 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="style.css">
-    <title>Juego de Combinación de Colores</title>
+    <title>Juegos de Colores</title>
 </head>
 <body>
-    <div class="container">
-        <h1>Juego de Combinación de Colores</h1>
+    <div class="container" id="menu">
+        <h1>Juegos de Colores</h1>
+        <button id="colorMatchButton">Jugar Combinación de Colores</button>
+        <button id="guessColorButton">Jugar Adivina el Color</button>
+        <button id="colorMixButton">Jugar Mezcla de Colores</button>
+    </div>
+
+    <!-- Juego 1: Combinación de Colores -->
+    <div class="container" id="colorMatchGame" style="display: none;">
+        <h1>Combinación de Colores</h1>
         <div class="color-display">
             <div class="color-box" id="targetColor"></div>
             <div class="color-box" id="userColor"></div>
@@ -28,9 +36,38 @@
             </label>
         </div>
         <button id="submitButton">Enviar Color</button>
+        <button id="backToMenuMatch">Volver al Menú</button>
         <p id="score">Puntuación: 0</p>
         <p id="message"></p>
     </div>
+
+    <!-- Juego 2: Adivina el Color -->
+    <div class="container" id="guessColorGame" style="display: none;">
+        <h1>Adivina el Color</h1>
+        <p id="colorCode">RGB(0, 0, 0)</p>
+        <div class="color-options" id="colorOptions"></div>
+        <p id="timer">Tiempo: 10s</p>
+        <p id="guessScore">Puntuación: 0</p>
+        <p id="guessMessage"></p>
+        <button id="backToMenuGuess">Volver al Menú</button>
+    </div>
+
+    <!-- Juego 3: Mezcla de Colores -->
+    <div class="container" id="colorMixGame" style="display: none;">
+        <h1>Mezcla de Colores</h1>
+        <div class="mix-controls">
+            <button class="color-select" data-color="red">Rojo</button>
+            <button class="color-select" data-color="green">Verde</button>
+            <button class="color-select" data-color="blue">Azul</button>
+            <button id="clearCanvas">Limpiar</button>
+        </div>
+        <canvas id="mixCanvas"></canvas>
+        <p id="mixResult">Color resultante: RGB(0, 0, 0)</p>
+        <p id="mixMessage"></p>
+        <button id="backToMenuMix">Volver al Menú</button>
+    </div>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/chroma-js/2.4.2/chroma.min.js"></script>
     <script src="script.js"></script>
 </body>
 </html>

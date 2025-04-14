@@ -172,6 +172,14 @@ span {
     transform: scale(1.1);
 }
 
+#targetColorDisplay {
+    width: clamp(120px, 50vw, 200px);
+    height: clamp(120px, 50vw, 200px);
+    border: 2px solid #000;
+    border-radius: 5px;
+    margin-bottom: 1rem;
+}
+
 #timer {
     font-size: clamp(1rem, 4vw, 1.2rem);
     font-weight: bold;
@@ -274,7 +282,7 @@ span {
         width: 100%;
         max-width: 250px;
     }
-    .color-box, .color-option, #mixCanvas, .color-preview {
+    .color-box, .color-option, #mixCanvas, .color-preview, #targetColorDisplay {
         width: clamp(80px, 45vw, 120px);
         height: clamp(80px, 45vw, 120px);
     }

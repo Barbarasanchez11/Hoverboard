@@ -119,7 +119,7 @@ blueSlider.addEventListener('input', updateUserColor);
 submitButton.addEventListener('click', checkColorMatch);
 
 // --- Juego 2: Adivina el Color ---
-const colorCodeDisplay = document.getElementById('colorCode');
+const targetColorDisplay = document.getElementById('targetColorDisplay');
 const colorOptions = document.getElementById('colorOptions');
 const timerDisplay = document.getElementById('timer');
 const guessScoreDisplay = document.getElementById('guessScore');
@@ -144,37 +144,43 @@ function startGuessColorRound() {
     timeLeft = level <= 3 ? 10 : level <= 6 ? 8 : 5;
     
     correctColor = getRandomColor();
-    colorCodeDisplay.textContent = `RGB(${correctColor.r}, ${correctColor.g}, ${correctColor.b})`;
+    targetColorDisplay.style.backgroundColor = `rgb(${correctColor.r}, ${correctColor.g}, ${correctColor.b})`;
+    targetColorDisplay.style.display = 'block';
+    colorOptions.style.display = 'none';
     colorOptions.innerHTML = '';
+    guessMessageDisplay.textContent = '¡Memoriza este color!';
     
-    const options = [correctColor];
-    for (let i = 0; i < 3; i++) {
-        options.push(getSimilarColor(correctColor, maxDiff));
-    }
-    options.sort(() => Math.random() - 0.5);
-    
-    options.forEach(option => {
-        const optionBox = document.createElement('div');
-        optionBox.classList.add('color-option');
-        optionBox.style.backgroundColor = `rgb(${option.r}, ${option.g}, ${option.b})`;
-        optionBox.addEventListener('click', () => checkGuessColor(option));
-        colorOptions.appendChild(optionBox);
-    });
-    
-    timerDisplay.textContent = `Tiempo: ${timeLeft}s`;
-    clearInterval(timerInterval);
-    timerInterval = setInterval(() => {
-        timeLeft--;
-        timerDisplay.textContent = `Tiempo: ${timeLeft}s`;
-        if (timeLeft <= 0) {
-            clearInterval(timerInterval);
-            guessMessageDisplay.textContent = '¡Tiempo agotado!';
-            guessMessageDisplay.style.color = 'red';
-            setTimeout(startGuessColorRound, 2000);
+    setTimeout(() => {
+        targetColorDisplay.style.display = 'none';
+        colorOptions.style.display = 'flex';
+        
+        const options = [correctColor];
+        for (let i = 0; i < 3; i++) {
+            options.push(getSimilarColor(correctColor, maxDiff));
         }
-    }, 1000);
-    
-    guessMessageDisplay.textContent = '';
+        options.sort(() => Math.random() - 0.5);
+        
+        options.forEach(option => {
+            const optionBox = document.createElement('div');
+            optionBox.classList.add('color-option');
+            optionBox.style.backgroundColor = `rgb(${option.r}, ${option.g}, ${option.b})`;
+            optionBox.addEventListener('click', () => checkGuessColor(option));
+            colorOptions.appendChild(optionBox);
+        });
+        
+        timerDisplay.textContent = `Tiempo: ${timeLeft}s`;
+        clearInterval(timerInterval);
+        timerInterval = setInterval(() => {
+            timeLeft--;
+            timerDisplay.textContent = `Tiempo: ${timeLeft}s`;
+            if (timeLeft <= 0) {
+                clearInterval(timerInterval);
+                guessMessageDisplay.textContent = '¡Tiempo agotado!';
+                guessMessageDisplay.style.color = 'red';
+                setTimeout(startGuessColorRound, 2000);
+            }
+        }, 1000);
+    }, 2000);
 }
 
 function checkGuessColor(selectedColor) {
@@ -350,7 +356,6 @@ function initCreativeModeGame() {
     renderPalette();
     creativeMessage.textContent = 'Ajusta los sliders para crear un color y añádelo a tu paleta.';
     
-    // Cargar paleta desde URL si existe
     const urlParams = new URLSearchParams(window.location.search);
     const colors = urlParams.get('colors');
     if (colors) {
@@ -359,7 +364,6 @@ function initCreativeModeGame() {
         creativeMessage.textContent = 'Paleta cargada desde el enlace.';
     }
     
-    // Cargar paleta guardada desde localStorage
     const savedPalettes = JSON.parse(localStorage.getItem('palettes') || '[]');
     if (savedPalettes.length > 0) {
         creativeMessage.textContent += ' Tienes paletas guardadas disponibles.';
@@ -456,7 +460,6 @@ function exportPalette() {
     });
 }
 
-// Event listeners para Modo Creativo
 creativeRedSlider.addEventListener('input', updateColorPreview);
 creativeGreenSlider.addEventListener('input', updateColorPreview);
 creativeBlueSlider.addEventListener('input', updateColorPreview);
@@ -466,5 +469,5 @@ savePaletteButton.addEventListener('click', savePalette);
 sharePaletteButton.addEventListener('click', sharePalette);
 exportPaletteButton.addEventListener('click', exportPalette);
 
-// Mostrar menú al cargar
+
 showSection(menu);

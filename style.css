@@ -307,6 +307,57 @@ span {
     border-radius: 3px;
 }
 
+/* Juego 5: Cuadrícula de Colores */
+.grid-controls {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+    margin-bottom: 1rem;
+    justify-content: center;
+}
+
+.grid-color {
+    background-color: #333;
+    padding: 0.5rem;
+    min-width: 60px;
+}
+
+.grid-color[data-color="red"] { background-color: #ff0000; }
+.grid-color[data-color="green"] { background-color: #00ff00; }
+.grid-color[data-color="blue"] { background-color: #0000ff; }
+.grid-color[data-color="black"] { background-color: #000000; }
+.grid-color[data-color="white"] { background-color: #ffffff; }
+.grid-color[data-color="random"] { background: linear-gradient(45deg, red, blue, green, yellow); }
+.grid-color[data-color="eraser"] { background-color: #ccc; }
+
+.grid-color:hover {
+    filter: brightness(80%);
+}
+
+.grid-container {
+    display: grid;
+    grid-template-columns: repeat(25, 1fr);
+    gap: 1px;
+    width: clamp(250px, 90vw, 500px);
+    background-color: #000;
+    border: 2px solid #000;
+    border-radius: 5px;
+    margin-bottom: 1rem;
+    touch-action: manipulation;
+}
+
+.grid-container.painting-active {
+    border-color: #00ff00;
+    box-shadow: 0 0 5px #00ff00;
+}
+
+.grid-square {
+    width: 100%;
+    padding-top: 100%;
+    background-color: #fff;
+    transition: background-color 0.2s;
+}
+
 /* Media Queries para pantallas pequeñas */
 @media (max-width: 600px) {
     .container {
@@ -334,6 +385,10 @@ span {
         font-size: 1rem;
         line-height: 25px;
     }
+    .grid-container {
+        grid-template-columns: repeat(20, 1fr);
+        width: clamp(200px, 85vw, 400px);
+    }
 }
 
 @media (max-width: 400px) {
@@ -342,5 +397,9 @@ span {
     }
     p, label, span {
         font-size: clamp(0.8rem, 4vw, 0.9rem);
+    }
+    .grid-container {
+        grid-template-columns: repeat(15, 1fr);
+        width: clamp(150px, 80vw, 300px);
     }
 }

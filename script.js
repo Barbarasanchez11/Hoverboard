@@ -4,14 +4,17 @@ const colorMatchGame = document.getElementById('colorMatchGame');
 const guessColorGame = document.getElementById('guessColorGame');
 const colorMixGame = document.getElementById('colorMixGame');
 const creativeModeGame = document.getElementById('creativeModeGame');
+const colorGridGame = document.getElementById('colorGridGame');
 const colorMatchButton = document.getElementById('colorMatchButton');
 const guessColorButton = document.getElementById('guessColorButton');
 const colorMixButton = document.getElementById('colorMixButton');
 const creativeModeButton = document.getElementById('creativeModeButton');
+const colorGridButton = document.getElementById('colorGridButton');
 const backToMenuMatch = document.getElementById('backToMenuMatch');
 const backToMenuGuess = document.getElementById('backToMenuGuess');
 const backToMenuMix = document.getElementById('backToMenuMix');
 const backToMenuCreative = document.getElementById('backToMenuCreative');
+const backToMenuGrid = document.getElementById('backToMenuGrid');
 
 // Función para mostrar solo una sección
 function showSection(section) {
@@ -20,6 +23,7 @@ function showSection(section) {
     guessColorGame.style.display = 'none';
     colorMixGame.style.display = 'none';
     creativeModeGame.style.display = 'none';
+    colorGridGame.style.display = 'none';
     section.style.display = 'flex';
 }
 
@@ -40,10 +44,15 @@ creativeModeButton.addEventListener('click', () => {
     showSection(creativeModeGame);
     initCreativeModeGame();
 });
+colorGridButton.addEventListener('click', () => {
+    showSection(colorGridGame);
+    initColorGridGame();
+});
 backToMenuMatch.addEventListener('click', () => showSection(menu));
 backToMenuGuess.addEventListener('click', () => showSection(menu));
 backToMenuMix.addEventListener('click', () => showSection(menu));
 backToMenuCreative.addEventListener('click', () => showSection(menu));
+backToMenuGrid.addEventListener('click', () => showSection(menu));
 
 // --- Juego 1: Combinación de Colores ---
 const targetColorBox = document.getElementById('targetColor');
@@ -236,11 +245,9 @@ function initColorMixGame() {
             const now = Date.now();
             const color = button.getAttribute('data-color');
             if (now - lastClickTime < DOUBLE_CLICK_THRESHOLD) {
-                // Doble clic: añadir 2 unidades
                 mix[color] = clamp(0, mix[color] + 2, 10);
                 mixMessage.textContent = `Añadiste el doble de ${color}.`;
             } else {
-                // Clic simple: añadir 1 unidad
                 mix[color] = clamp(0, mix[color] + 1, 10);
                 mixMessage.textContent = `Añadiste ${color}.`;
             }
@@ -339,7 +346,6 @@ function calculateMixedColor() {
         weights.push(mix.yellow);
     }
     
-    // Mezcla ponderada usando chroma.js
     let result = colors[0];
     for (let i = 1; i < colors.length; i++) {
         result = chroma.mix(result, colors[i], weights[i] / (weights[i-1] + weights[i]), 'rgb');
@@ -515,5 +521,91 @@ savePaletteButton.addEventListener('click', savePalette);
 sharePaletteButton.addEventListener('click', sharePalette);
 exportPaletteButton.addEventListener('click', exportPalette);
 
-// Mostrar menú al cargar
+// --- Juego 5: Cuadrícula de Colores ---
+const gridContainer = document.getElementById('gridContainer');
+const gridColorButtons = document.querySelectorAll('.grid-color');
+const clearGrid = document.getElementById('clearGrid');
+const gridMessage = document.getElementById('gridMessage');
+
+let selectedGridColor = 'red';
+let isPainting = false;
+const GRID_SIZE = 500;
+
+function initColorGridGame() {
+    gridContainer.innerHTML = '';
+    for (let i = 0; i < GRID_SIZE; i++) {
+        const square = document.createElement('div');
+        square.classList.add('grid-square');
+        square.addEventListener('mouseover', paintSquare);
+        square.addEventListener('touchstart', handleTouch);
+        gridContainer.appendChild(square);
+    }
+    selectedGridColor = 'red';
+    isPainting = false;
+    gridContainer.classList.remove('painting-active');
+    gridMessage.textContent = 'Haz clic en la cuadrícula para activar la pintura.';
+    
+    gridContainer.addEventListener('mousedown', togglePainting);
+    gridContainer.addEventListener('touchstart', (e) => {
+        if (e.target.classList.contains('grid-square')) return; // Evitar toggle si se toca un cuadrado
+        e.preventDefault();
+        togglePainting(e);
+    });
+}
+
+function togglePainting(e) {
+    e.preventDefault();
+    isPainting = !isPainting;
+    gridContainer.classList.toggle('painting-active', isPainting);
+    gridMessage.textContent = isPainting 
+        ? `Pintura activada con ${selectedGridColor === 'random' ? 'colores aleatorios' : selectedGridColor === 'eraser' ? 'borrador' : selectedGridColor}.`
+        : 'Pintura desactivada. Haz clic para activar.';
+}
+
+function handleTouch(e) {
+    e.preventDefault();
+    if (isPainting) {
+        paintSquare(e);
+    }
+}
+
+function paintSquare(e) {
+    if (!isPainting) return;
+    const square = e.target;
+    let color;
+    switch (selectedGridColor) {
+        case 'red': color = '#ff0000'; break;
+        case 'green': color = '#00ff00'; break;
+        case 'blue': color = '#0000ff'; break;
+        case 'black': color = '#000000'; break;
+        case 'white': color = '#ffffff'; break;
+        case 'random': 
+            color = `rgb(${Math.floor(Math.random() * 256)}, ${Math.floor(Math.random() * 256)}, ${Math.floor(Math.random() * 256)})`;
+            break;
+        case 'eraser': color = '#ffffff'; break;
+        default: color = '#ff0000';
+    }
+    square.style.backgroundColor = color;
+}
+
+gridColorButtons.forEach(button => {
+    button.addEventListener('click', () => {
+        selectedGridColor = button.getAttribute('data-color');
+        gridMessage.textContent = isPainting
+            ? `Pintura activada con ${selectedGridColor === 'random' ? 'colores aleatorios' : selectedGridColor === 'eraser' ? 'borrador' : selectedGridColor}.`
+            : `Color seleccionado: ${selectedGridColor === 'random' ? 'colores aleatorios' : selectedGridColor === 'eraser' ? 'borrador' : selectedGridColor}. Haz clic para activar pintura.`;
+    });
+});
+
+clearGrid.addEventListener('click', () => {
+    const squares = document.querySelectorAll('.grid-square');
+    squares.forEach(square => {
+        square.style.backgroundColor = '#ffffff';
+    });
+    isPainting = false;
+    gridContainer.classList.remove('painting-active');
+    gridMessage.textContent = 'Cuadrícula limpiada. Haz clic para activar pintura.';
+});
+
+
 showSection(menu);

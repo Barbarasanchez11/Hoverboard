@@ -13,6 +13,7 @@
         <button id="guessColorButton">Jugar Adivina el Color</button>
         <button id="colorMixButton">Jugar Mezcla de Colores</button>
         <button id="creativeModeButton">Jugar Modo Creativo</button>
+        <button id="colorGridButton">Jugar Cuadrícula de Colores</button>
     </div>
 
     <!-- Juego 1: Combinación de Colores -->
@@ -114,6 +115,24 @@
         <div class="palette" id="palette"></div>
         <p id="creativeMessage"></p>
         <button id="backToMenuCreative">Volver al Menú</button>
+    </div>
+
+    <!-- Juego 5: Cuadrícula de Colores -->
+    <div class="container" id="colorGridGame" style="display: none;">
+        <h1>Cuadrícula de Colores</h1>
+        <div class="grid-controls">
+            <button class="grid-color" data-color="red">Rojo</button>
+            <button class="grid-color" data-color="green">Verde</button>
+            <button class="grid-color" data-color="blue">Azul</button>
+            <button class="grid-color" data-color="black">Negro</button>
+            <button class="grid-color" data-color="white">Blanco</button>
+            <button class="grid-color" data-color="random">Aleatorio</button>
+            <button class="grid-color" data-color="eraser">Borrador</button>
+            <button id="clearGrid">Limpiar Cuadrícula</button>
+        </div>
+        <div class="grid-container" id="gridContainer"></div>
+        <p id="gridMessage">Selecciona un color y pinta la cuadrícula.</p>
+        <button id="backToMenuGrid">Volver al Menú</button>
     </div>
 
     <script src="https://cdnjs.cloudflare.com/ajax/libs/chroma-js/2.4.2/chroma.min.js"></script>
